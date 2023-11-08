@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { RecoilRoot } from 'recoil';
 
 import './tailwind.css';
 
@@ -16,9 +17,15 @@ import GroupSearchResultPage from '@pages/GroupSearchResultPage';
 import GroupCreatePage from '@pages/GroupCreatePage';
 import ReportPage from '@pages/ReportPage';
 import PostEditPage from '@pages/PostEditPage';
+import PostHistoryPage from '@pages/PostHistoryPage';
+import GroupJoinPage from '@pages/GroupJoinPage';
+import KakaoLoginPage from '@pages/KakaoLoginPage';
+import NotFoundPage from '@pages/NotFoundPage';
+import InviteProcessPage from '@pages/InviteProcessPage';
 
-import MainLayout from '@components/MainLayout';
-import PageLayout from '@components/PageLayout';
+import MainLayout from '@components/Layout/MainLayout';
+import PageLayout from '@components/Layout/PageLayout';
+import NoHeaderLayout from '@components/Layout/NoHeaderLayout';
 import App from './App';
 
 const router = createBrowserRouter([
@@ -34,28 +41,20 @@ const router = createBrowserRouter([
             element: <HomePage />,
           },
           {
-            path: '/:groupName/myPage',
-            element: <GroupMyPage />,
+            path: '/signUp',
+            element: <SignUpPage />,
           },
           {
-            path: '/:groupName/myPage/contribute',
-            element: <MyContributePage />,
+            path: '/auth/kakao/signin',
+            element: <KakaoLoginPage />,
           },
           {
             path: '/login',
             element: <LoginPage />,
           },
           {
-            path: '/signUp',
-            element: <SignUpPage />,
-          },
-          {
             path: '/myPage',
             element: <MyPage />,
-          },
-          {
-            path: '/:groupName/search',
-            element: <SearchResultPage />,
           },
           {
             path: '/search/group',
@@ -66,8 +65,28 @@ const router = createBrowserRouter([
             element: <GroupCreatePage />,
           },
           {
-            path: '/:groupName/:page/:postId/report',
+            path: '/:groupId/myPage',
+            element: <GroupMyPage />,
+          },
+          {
+            path: '/:groupId/myPage/contribute',
+            element: <MyContributePage />,
+          },
+          {
+            path: '/:groupId/search',
+            element: <SearchResultPage />,
+          },
+          {
+            path: '/:groupId/:page/:postId/report',
             element: <ReportPage />,
+          },
+          {
+            path: '/:groupId/:page/:postId/history',
+            element: <PostHistoryPage />,
+          },
+          {
+            path: '/404',
+            element: <NotFoundPage />,
           },
         ],
       },
@@ -75,12 +94,37 @@ const router = createBrowserRouter([
         element: <PageLayout />,
         children: [
           {
-            path: '/:groupName/:page?',
+            path: '/:groupId/:page',
             element: <GroupMainPage />,
           },
           {
-            path: '/:groupName/:page?/:post/edit',
+            path: '/:groupId/:page/:postId/edit',
             element: <PostEditPage />,
+          },
+        ],
+      },
+      {
+        element: <NoHeaderLayout />,
+        children: [
+          {
+            path: '/signUp',
+            element: <SignUpPage />,
+          },
+          {
+            path: '/kakaoLogin',
+            element: <KakaoLoginPage />,
+          },
+          {
+            path: '/login',
+            element: <LoginPage />,
+          },
+          {
+            path: '/:groupId/join',
+            element: <GroupJoinPage />,
+          },
+          {
+            path: '/invite/:inviteCode',
+            element: <InviteProcessPage />,
           },
         ],
       },
@@ -90,7 +134,9 @@ const router = createBrowserRouter([
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
-  <React.StrictMode>
+  // <React.StrictMode>
+  <RecoilRoot>
     <RouterProvider router={router} />
-  </React.StrictMode>,
+  </RecoilRoot>,
+  // </React.StrictMode>,
 );
